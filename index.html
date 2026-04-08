@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CarroRD — Vende tu Carro</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://upload-widget.cloudinary.com/latest/global/all.js" defer></script>
+<script src="js/main.js" defer></script>
+<!--
+  CONFIGURACIÓN — SOLO CAMBIA ESTOS VALORES
+  (Pega aquí la constante CONFIG)
+-->
+<script>
+const CONFIG = {
+  whatsapp: '18095550000',
+  precio: 'RD$400',
+  nombre: 'CarroRD',
+  airtable_token: 'TU_TOKEN_AQUI',
+  airtable_base:  'TU_BASE_ID_AQUI',
+  airtable_table: 'Listings',
+  cloudinary_cloud:  'TU_CLOUD_NAME',
+  cloudinary_preset: 'TU_UPLOAD_PRESET',
+  stripe_payment_link: 'TU_PAYMENT_LINK_URL',
+};
+</script>
+</head>
+<body>
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ── DETAIL MODAL ── -->
+<div class="mbg" id="mModal">
+  <div class="mbox">
+    <div class="m-img" id="mImg">
+      <button class="m-close" onclick="closeMModal()">✕</button>
+    </div>
+    <div class="m-body">
+      <div class="m-price" id="mPrice"></div>
+      <div class="m-name" id="mName"></div>
+      <div class="m-sgrid" id="mSpecs"></div>
+      <div class="m-desc" id="mDesc"></div>
+      <div class="m-ctas">
+        <a id="mWaBtn" href="#" target="_blank" class="btn-wa">💬 WhatsApp</a>
+        <a id="mTelBtn" href="#" class="btn-tel">📞 Llamar</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SUBMIT MODAL ── -->
+<div class="smbg" id="sModal">
+  <div class="smbox">
+    <div class="sm-head">
+      <div>
+        <h2>📋 Publicar mi Carro</h2>
+        <p id="smSubhead">Completa el formulario — publicamos en 24 horas</p>
+      </div>
+      <button class="sm-close" onclick="closeSubmit()">✕</button>
+    </div>
+
+    <!-- FORM -->
+    <div class="sm-body" id="smForm">
+      <!-- PAGO STRIPE -->
+      <div class="pay-stripe">
+        <h4>💳 Publicación · Pago seguro</h4>
+        <div class="pay-big" id="payBig"></div>
+        <p>Al enviar el formulario serás redirigido a Stripe para pagar de forma segura con tarjeta.</p>
+        <div class="pay-icons">
+          <span class="pay-icon">VISA</span>
+          <span class="pay-icon">MasterCard</span>
+          <span class="pay-icon">AMEX</span>
+        </div>
+      </div>
+      <!-- DATOS CARRO -->
+      <div class="fgrid">
+        <div class="fg">
+          <label>Marca *</label>
+          <select id="fMarca" required>
+            <option value="">Seleccionar...</option>
+            <option>Toyota</option><option>Honda</option><option>Hyundai</option>
+            <option>Kia</option><option>Nissan</option><option>Mitsubishi</option>
+            <option>BMW</option><option>Mercedes-Benz</option><option>Audi</option>
+            <option>Ford</option><option>Chevrolet</option><option>Jeep</option>
+            <option>Volkswagen</option><option>Mazda</option><option>Subaru</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Modelo *</label>
+          <input type="text" id="fModelo" placeholder="Ej: Corolla, Civic, Tucson..." required>
+        </div>
+        <div class="fg">
+          <label>Año *</label>
+          <select id="fAnio" required>
+            <option value="">Año...</option>
+            <option>2026</option><option>2025</option><option>2024</option>
+            <option>2023</option><option>2022</option><option>2021</option>
+            <option>2020</option><option>2019</option><option>2018</option>
+            <option>2017</option><option>2016</option><option>2015</option>
+            <option>2014</option><option>2013</option><option>2012</option>
+            <option>2011</option><option>Antes de 2011</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Versión / Trim</label>
+          <input type="text" id="fVersion" placeholder="Ej: EX, LX, Sport, Full...">
+        </div>
+        <div class="fg">
+          <label>Kilometraje *</label>
+          <input type="text" id="fKm" placeholder="Ej: 45,000 km" required>
+        </div>
+        <div class="fg">
+          <label>Transmisión *</label>
+          <select id="fTrans" required>
+            <option value="">Seleccionar...</option>
+            <option>Automática</option><option>Manual</option>
+            <option>CVT</option><option>DSG</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Combustible *</label>
+          <select id="fFuel" required>
+            <option value="">Seleccionar...</option>
+            <option>Gasolina</option><option>Diésel</option>
+            <option>Híbrido</option><option>Eléctrico</option><option>GLP</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Color</label>
+          <input type="text" id="fColor" placeholder="Ej: Blanco, Negro, Plata...">
+        </div>
+        <div class="fg">
+          <label>Precio en RD$ *</label>
+          <input type="text" id="fPrecio" placeholder="Ej: 850,000" required>
+        </div>
+        <div class="fg">
+          <label>Zona / Provincia *</label>
+          <select id="fZona" required>
+            <option value="">Seleccionar...</option>
+            <option>Santo Domingo</option><option>Santo Domingo Norte</option>
+            <option>Santo Domingo Este</option><option>Santiago</option>
+            <option>La Romana</option><option>San Pedro de Macorís</option>
+            <option>Puerto Plata</option><option>Higüey</option>
+            <option>San Cristóbal</option><option>Bonao</option>
+            <option>Otra</option>
+          </select>
+        </div>
+        <div class="fg full">
+          <label>Descripción del carro</label>
+          <textarea id="fDesc" placeholder="Estado, equipos, historial de mantenimiento, accesorios... Más detalles = más contactos."></textarea>
+        </div>
+        <!-- FOTOS CLOUDINARY -->
+        <div class="fg full">
+          <label>Fotos del carro * (3-10 fotos)</label>
+          <div class="photo-upload-area" id="photoUploadArea" onclick="openCloudinaryWidget()">
+            <div class="pu-icon">📷</div>
+            <div class="pu-text">Clic para subir fotos</div>
+            <div class="pu-hint">Exterior, interior, tablero, motor. JPG o PNG, máx 5MB cada una.</div>
+          </div>
+          <div class="photo-previews" id="photoPreviews"></div>
+          <div class="photo-hint">
+            <strong id="photoCount">0</strong>/10 fotos subidas. Las mejores fotos generan 3x más contactos.
+          </div>
+        </div>
+        <!-- CONTACTO -->
+        <div class="fg">
+          <label>Tu nombre *</label>
+          <input type="text" id="fNombre" placeholder="Tu nombre completo" required>
+        </div>
+        <div class="fg">
+          <label>WhatsApp *</label>
+          <input type="tel" id="fWA" placeholder="+1 (809) 000-0000" required>
+        </div>
+        <div class="fg full">
+          <label>¿Negociable?</label>
+          <select id="fNeg">
+            <option>Sí, acepto ofertas</option>
+            <option>No, precio fijo</option>
+          </select>
+        </div>
+        <!-- SECURE PAY NOTE -->
+        <div class="fg full">
+          <div class="wa-confirm" style="background:rgba(99,91,255,.06);border-color:rgba(99,91,255,.2);">
+            <div class="wc-icon">🔒</div>
+            <p>Al continuar, serás redirigido a <strong style="color:#635BFF;">Stripe</strong> para completar el pago de forma segura. Tu carro se publicará automáticamente después del pago.</p>
+          </div>
+        </div>
+      </div>
+      <div class="sm-actions">
+        <button class="btn-cancel" onclick="closeSubmit()">Cancelar</button>
+        <button class="btn-submit" id="submitBtn" onclick="submitForm()" style="background:#635BFF;">
+          <span id="submitTxt">Continuar al pago →</span>
+        </button>
+      </div>
+    </div><!-- end smForm -->
+    <!-- SUCCESS -->
+    <div class="success-state" id="smSuccess">
+      <div class="success-icon">🎉</div>
+      <h3>¡Pago completado!</h3>
+      <p>Tu carro ha sido publicado exitosamente en CarroRD. Los compradores te contactarán directamente por WhatsApp.</p>
+      <a href="#catalogo" class="success-wa" style="background:var(--orange);" onclick="closeSubmit()">
+        🚗 Ver catálogo
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="logo" id="siteLogo">Carro<b>RD</b></div>
+  <div class="nav-r">
+    <span class="nav-tag"><strong id="navCt">0</strong> carros</span>
+    <button class="btn-nav" onclick="openSubmit()">+ Publicar mi carro</button>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="h-eyebrow">🇩🇴 República Dominicana</div>
+    <h1>VENDE TU<br>CARRO<br><mark>HOY</mark></h1>
+    <p>Publica tu vehículo y llega a miles de compradores en toda la RD. Simple, rápido, sin complicaciones.</p>
+    <div class="hero-btns">
+      <button class="btn-hero-p" onclick="openSubmit()">🚗 Publicar mi carro</button>
+      <a href="#catalogo" class="btn-hero-s">Ver catálogo ↓</a>
+    </div>
+    <div class="hero-pills">
+      <span class="hpill" onclick="filterCars('sedan',this)">Sedán</span>
+      <span class="hpill" onclick="filterCars('suv',this)">SUV / Jeepeta</span>
+      <span class="hpill" onclick="filterCars('pickup',this)">Pickup</span>
+      <span class="hpill" onclick="filterCars('hatch',this)">Hatchback</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ── -->
+<div class="how">
+  <div class="how-grid">
+    <div class="how-step">
+      <div class="step-circle">📋</div>
+      <h4>1. Llena el formulario</h4>
+      <p>Datos del carro, fotos y tu número de WhatsApp. Toma 3 minutos.</p>
+    </div>
+    <div class="how-step">
+      <div class="step-circle">💸</div>
+      <h4>2. Paga la publicación</h4>
+      <p>Una sola transferencia y listo. Enviamos el comprobante por WhatsApp.</p>
+      <div class="price-chip" id="howPrice"></div>
+    </div>
+    <div class="how-step">
+      <div class="step-circle">📱</div>
+      <h4>3. Recibe compradores</h4>
+      <p>Los interesados te contactan directo a tu WhatsApp. Sin intermediarios.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── SEARCH BAR ── -->
+<div class="search-bar">
+  <input type="text" class="search-input" id="searchInput" placeholder="Buscar por marca, modelo, versión..." oninput="debouncedApplyFilters()">
+  <button class="btn-filters-toggle" id="btnToggleFilters" onclick="toggleAdvFilters()">
+    ⚙ Más filtros
+  </button>
+</div>
+
+<!-- ── ADVANCED FILTERS ── -->
+<div class="adv-filters" id="advFilters">
+  <div class="adv-grid">
+    <div class="af-group">
+      <label>Precio mínimo</label>
+      <input type="number" id="afPrecioMin" placeholder="Ej: 500000" onchange="applyFilters()">
+    </div>
+    <div class="af-group">
+      <label>Precio máximo</label>
+      <input type="number" id="afPrecioMax" placeholder="Ej: 2000000" onchange="applyFilters()">
+    </div>
+    <div class="af-group">
+      <label>Año desde</label>
+      <select id="afAnioMin" onchange="applyFilters()">
+        <option value="">Cualquiera</option>
+        <option>2026</option><option>2025</option><option>2024</option><option>2023</option>
+        <option>2022</option><option>2021</option><option>2020</option><option>2019</option>
+        <option>2018</option><option>2017</option><option>2016</option><option>2015</option>
+      </select>
+    </div>
+    <div class="af-group">
+      <label>Año hasta</label>
+      <select id="afAnioMax" onchange="applyFilters()">
+        <option value="">Cualquiera</option>
+        <option>2026</option><option>2025</option><option>2024</option><option>2023</option>
+        <option>2022</option><option>2021</option><option>2020</option><option>2019</option>
+        <option>2018</option><option>2017</option><option>2016</option><option>2015</option>
+      </select>
+    </div>
+    <div class="af-group">
+      <label>Transmisión</label>
+      <select id="afTrans" onchange="applyFilters()">
+        <option value="">Todas</option>
+        <option>Automática</option><option>Manual</option><option>CVT</option><option>DSG</option>
+      </select>
+    </div>
+    <div class="af-group">
+      <label>Combustible</label>
+      <select id="afFuel" onchange="applyFilters()">
+        <option value="">Todos</option>
+        <option>Gasolina</option><option>Diésel</option><option>Híbrido</option><option>Eléctrico</option><option>GLP</option>
+      </select>
+    </div>
+    <div class="af-group">
+      <label>Zona</label>
+      <select id="afZona" onchange="applyFilters()">
+        <option value="">Todas</option>
+        <option>Santo Domingo</option><option>Santo Domingo Norte</option>
+        <option>Santo Domingo Este</option><option>Santiago</option>
+        <option>La Romana</option><option>San Pedro de Macorís</option>
+        <option>Puerto Plata</option><option>Higüey</option>
+        <option>San Cristóbal</option><option>Bonao</option>
+      </select>
+    </div>
+    <div class="af-actions">
+      <button class="btn-clear-filters" onclick="clearAllFilters()">Limpiar filtros</button>
+    </div>
+  </div>
+</div>
+
+<!-- Active filter chips -->
+<div class="active-chips" id="activeChips"></div>
+
+<!-- ── FILTER BAR (tipo rápido) ── -->
+<div class="fbar">
+  <span class="fl">Tipo:</span>
+  <button class="fp on" onclick="filterCars('todos',this)">Todos</button>
+  <button class="fp" onclick="filterCars('sedan',this)">Sedán</button>
+  <button class="fp" onclick="filterCars('suv',this)">SUV / Jeepeta</button>
+  <button class="fp" onclick="filterCars('pickup',this)">Pickup</button>
+  <button class="fp" onclick="filterCars('hatch',this)">Hatchback</button>
+  <span class="f-ct"><strong id="filterCt">0</strong> vehículos</span>
+</div>
+
+<!-- ── CATALOG ── -->
+<div class="catalog" id="catalogo">
+  <div class="cat-top">
+    <div class="cat-title">VEHÍCULOS DISPONIBLES</div>
+    <select class="sort-s" onchange="sortListings(this.value)">
+      <option value="reciente">Más recientes primero</option>
+      <option value="low">Precio: menor a mayor</option>
+      <option value="high">Precio: mayor a menor</option>
+      <option value="year">Año: más nuevo</option>
+    </select>
+  </div>
+  <div class="cgrid" id="grid">
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p style="color:var(--muted);font-size:.9rem;">Cargando vehículos...</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="f-logo">Carro<b>RD</b></div>
+  <div class="f-copy">© 2026 CarroRD · República Dominicana 🇩🇴</div>
+  <a id="footerWa" href="#" target="_blank" class="f-wa">💬 WhatsApp</a>
+</footer>
+
+</body>
+</html>

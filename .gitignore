@@ -1,0 +1,7 @@
+# Archivos y carpetas a ignorar
+node_modules/
+.vscode/
+dist/
+.env
+.DS_Store
+Thumbs.db
