@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#111110"/>
+  <!-- Radial glow -->
+  <radialGradient id="glow" cx="70%" cy="30%" r="55%">
+    <stop offset="0%" stop-color="#E85420" stop-opacity="0.25"/>
+    <stop offset="100%" stop-color="#111110" stop-opacity="0"/>
+  </radialGradient>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- Logo -->
+  <text x="90" y="160" font-family="Arial Black, sans-serif" font-size="120" font-weight="900"
+        fill="#FFFFFF" letter-spacing="-4">Carro<tspan fill="#E85420">RD</tspan></text>
+
+  <!-- Tagline -->
+  <text x="90" y="230" font-family="Arial, sans-serif" font-size="32" font-weight="400"
+        fill="rgba(255,255,255,0.5)" letter-spacing="1">Vende tu vehículo en República Dominicana</text>
+
+  <!-- Divider -->
+  <rect x="90" y="268" width="80" height="3" rx="2" fill="#E85420"/>
+
+  <!-- Feature pills -->
+  <rect x="90" y="310" width="200" height="48" rx="24" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+  <text x="190" y="341" font-family="Arial, sans-serif" font-size="20" fill="rgba(255,255,255,0.7)" text-anchor="middle">🚗 Publica en minutos</text>
+
+  <rect x="310" y="310" width="220" height="48" rx="24" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+  <text x="420" y="341" font-family="Arial, sans-serif" font-size="20" fill="rgba(255,255,255,0.7)" text-anchor="middle">💬 Contacto por WhatsApp</text>
+
+  <rect x="550" y="310" width="200" height="48" rx="24" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+  <text x="650" y="341" font-family="Arial, sans-serif" font-size="20" fill="rgba(255,255,255,0.7)" text-anchor="middle">💳 Pago seguro Stripe</text>
+
+  <!-- Price badge -->
+  <rect x="90" y="400" width="180" height="52" rx="10" fill="rgba(232,84,32,0.12)" stroke="rgba(232,84,32,0.4)" stroke-width="1.5"/>
+  <text x="180" y="433" font-family="Arial Black, sans-serif" font-size="24" font-weight="900"
+        fill="#E85420" text-anchor="middle">RD$400 / pub.</text>
+
+  <!-- Domain -->
+  <text x="90" y="540" font-family="Arial, sans-serif" font-size="22" fill="rgba(255,255,255,0.25)">🇩🇴  carrord.netlify.app</text>
+</svg>
