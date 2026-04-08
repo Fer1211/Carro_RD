@@ -2,19 +2,43 @@
 
 > Plataforma para publicar y vender vehículos en República Dominicana — simple, rápida y sin complicaciones.
 
-![CarroRD Preview](img/og-image.svg)
+![Hero](screenshots/hero.png)
+
+---
+
+## Vista general
+
+### Catálogo de vehículos
+Filtros rápidos por tipo, búsqueda en tiempo real, ordenamiento por precio y año.
+
+![Catálogo](screenshots/catalog.png)
+
+### Modal de detalle
+Información completa del vehículo con botón directo a WhatsApp y llamada.
+
+![Modal Detalle](screenshots/modal-detail.png)
+
+### Formulario de publicación
+El vendedor llena los datos, sube fotos y paga con Stripe en un solo flujo.
+
+![Modal Publicar](screenshots/modal-publish.png)
+
+### Vista móvil
+Diseño completamente responsivo optimizado para celular.
+
+![Mobile](screenshots/mobile.png)
 
 ---
 
 ## Características
 
-- **Catálogo de vehículos** con filtros por tipo, precio, año, transmisión, combustible y zona
+- **Catálogo** con filtros por tipo, precio, año, transmisión, combustible y zona
 - **Búsqueda en tiempo real** con chips de filtros activos
-- **Publicación con pago** integrado a través de Stripe
 - **Fotos** via Cloudinary (hasta 10 fotos por publicación)
-- **Base de datos** en Airtable (sin backend propio)
+- **Publicación con pago** integrado a Stripe
+- **Base de datos** en Airtable — sin backend propio
 - **Modo demo** — funciona sin configurar nada, con datos de ejemplo
-- Responsive y optimizado para móvil
+- Responsive, optimizado para móvil
 
 ---
 
@@ -22,14 +46,15 @@
 
 ```
 CarroRD/
-├── index.html          # HTML principal
+├── index.html              # HTML principal
 ├── css/
-│   └── style.css       # Todos los estilos
+│   └── style.css           # Todos los estilos
 ├── js/
-│   └── main.js         # Lógica de la app (filtros, Airtable, Stripe, Cloudinary)
+│   └── main.js             # Lógica (filtros, Airtable, Stripe, Cloudinary)
 ├── img/
-│   ├── favicon.svg     # Ícono del sitio
-│   └── og-image.svg    # Imagen para redes sociales
+│   ├── favicon.svg         # Ícono del sitio
+│   └── og-image.svg        # Imagen para redes sociales
+├── screenshots/            # Capturas de pantalla del sitio
 ├── .gitignore
 └── README.md
 ```
@@ -57,8 +82,8 @@ const CONFIG = {
 ### Paso 1 — Airtable (base de datos)
 
 1. Crea una cuenta en [airtable.com](https://airtable.com)
-2. Crea una base llamada **CarroRD** con una tabla **Listings**
-3. Agrega las columnas:
+2. Crea una base **CarroRD** con una tabla **Listings**
+3. Agrega estas columnas:
 
 | Columna    | Tipo              |
 |------------|-------------------|
@@ -115,11 +140,8 @@ Tú apruebas    → Cambias Status a "Publicado" en Airtable
 ## Correr localmente
 
 ```bash
-# Con Python (sin instalación)
-python -m http.server 3000
-
-# Luego abre:
-# http://localhost:3000
+python -m http.server 1000
+# Abre: http://localhost:1000
 ```
 
 ---
@@ -130,6 +152,4 @@ python -m http.server 3000
 
 ---
 
-## Desarrollado por
-
-[Fer1211](https://github.com/Fer1211) · República Dominicana 🇩🇴
+Desarrollado por [Fer1211](https://github.com/Fer1211) · República Dominicana 🇩🇴
